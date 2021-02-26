@@ -1,0 +1,55 @@
+---
+- hosts: all
+  become: yes
+  become_user: root
+  become_method: sudo
+  tasks:
+    - name: Garantindo /etc/hosts
+      lineinfile:
+        path: /etc/hosts
+        line: "{{ item }}"
+      with_items:
+        - 200.100.50.200 kube-client
+
+    - name: Instalando pacotes de dependencias para o curso de Rancher
+      yum:
+        name: ['unzip', 'wget', 'elinks', 'rsync', 'git', 'vim']
+
+    - name: Adicionar usuario suporte
+      user:
+        name: suporte
+        shell: /bin/bash
+        password : $1$QbUARykG$p2nthVG8AkDvabKPHwboa1
+
+    - name: Criando o arquivo 98_4linux
+      copy:
+        src: files/98_4linux
+        dest: /etc/sudoers.d
+        mode: 0644
+
+    - name: Criando o arquivo ldap-base.ldif
+      copy:
+        src: files/ldap-base.ldif
+        dest: /opt
+        mode: 0644
+        owner: suporte
+        group: suporte
+
+    - name: Criando diretório wordpress-deploy
+      synchronize:
+        src: files/wordpress-deploy
+        dest: /opt
+        owner: suporte
+        group: suporte
+
+    - name: Alterando arquivo do SELinux
+      lineinfile:
+          path: /etc/selinux/config
+          regexp: '^SELINUX='
+          line: 'SELINUX=disabled'
+
+    - name: Desabilitando o Firewall
+      command: systemctl disable firewalld
+
+    - name: Parando FirewallD
+      command: systemctl stop firewalld

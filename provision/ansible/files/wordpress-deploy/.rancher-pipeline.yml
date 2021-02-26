@@ -1,0 +1,13 @@
+stages:
+- name: Gerar Imagem do Wordpress
+  steps:
+  - publishImageConfig:
+      dockerfilePath: ./wordpress/Dockerfile
+      buildContext: .
+      tag: wordpress:${CICD_EXECUTION_SEQUENCE}
+- name: Executar Deploy do Wordpress no Kubernetes
+  steps:
+  - applyYamlConfig:
+      path: ./deploy/deployment.yaml
+timeout: 60
+notification: {}
