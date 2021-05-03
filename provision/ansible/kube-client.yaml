@@ -39,9 +39,7 @@
       synchronize:
         src: files/wordpress-deploy
         dest: /opt
-        owner: suporte
-        group: suporte
-
+        
     - name: Alterando arquivo do SELinux
       lineinfile:
           path: /etc/selinux/config
