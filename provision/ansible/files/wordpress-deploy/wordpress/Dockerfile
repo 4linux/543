@@ -1,4 +1,4 @@
-FROM wordpress:latest
+FROM wordpress:4.8-apache
 
 VOLUME /var/www/html
 
