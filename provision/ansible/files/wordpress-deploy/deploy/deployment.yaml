@@ -3,19 +3,18 @@ kind: Deployment
 metadata:
   namespace: devops
   labels:
-    app: wordpress
+    cattle.io/creator: norman
+    workload.user.cattle.io/workloadselector: deployment-devops-mysql
   name: mysql
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: wordpress
-      tier: mysql
+      workload.user.cattle.io/workloadselector: deployment-devops-mysql
   template:
     metadata:
       labels:
-        app: wordpress
-        tier: mysql
+        workload.user.cattle.io/workloadselector: deployment-devops-mysql
     spec:
       containers:
       - env:
@@ -44,7 +43,7 @@ kind: Service
 metadata:
   namespace: devops
   labels:
-    app: wordpress
+    cattle.io/creator: norman
   name: mysql
 spec:
   ports:
@@ -53,7 +52,7 @@ spec:
     protocol: TCP
     targetPort: 3306
   selector:
-    app: wordpress
+    workload.user.cattle.io/workloadselector: deployment-devops-mysql
   type: ClusterIP
 status:
   loadBalancer: {}
@@ -63,19 +62,18 @@ kind: Deployment
 metadata:
   namespace: devops
   labels:
-    app: wordpress
+    cattle.io/creator: norman
+    workload.user.cattle.io/workloadselector: deployment-devops-wordpress
   name: wordpress
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: wordpress
-      tier: frontend
+      workload.user.cattle.io/workloadselector: deployment-devops-wordpress
   template:
     metadata:
       labels:
-        app: wordpress
-        tier: frontend
+        workload.user.cattle.io/workloadselector: deployment-devops-wordpress
     spec:
       imagePullSecrets:
       - name: pipeline-docker-registry
@@ -108,8 +106,8 @@ kind: Service
 metadata:
   namespace: devops
   labels:
-    app: wordpress
-  name: wordpress
+    cattle.io/creator: norman
+  name: wordpress-nodeport
 spec:
   externalTrafficPolicy: Cluster
   ports:
@@ -118,7 +116,7 @@ spec:
     protocol: TCP
     targetPort: 80
   selector:
-    app: wordpress
+    workload.user.cattle.io/workloadselector: deployment-devops-wordpress
   type: NodePort
 status:
   loadBalancer: {}
@@ -128,15 +126,15 @@ kind: Ingress
 metadata:
   namespace: devops
   labels:
-    app: wordpress
+    cattle.io/creator: norman
   name: wordpress
 spec:
   rules:
-  - host: wordpress.devops.35.247.193.95.xip.io
+  - host: wordpress.devops.35.247.229.217.nip.io
     http:
       paths:
       - backend:
-          serviceName: wordpress
+          serviceName: wordpress-nodeport
           servicePort: 80
         path: /
 status:
