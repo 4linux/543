@@ -1,61 +1,3 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  namespace: devops
-  labels:
-    cattle.io/creator: norman
-    workload.user.cattle.io/workloadselector: deployment-devops-mysql
-  name: mysql
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      workload.user.cattle.io/workloadselector: deployment-devops-mysql
-  template:
-    metadata:
-      labels:
-        workload.user.cattle.io/workloadselector: deployment-devops-mysql
-    spec:
-      containers:
-      - env:
-        - name: MYSQL_ROOT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              key: mysql-password
-              name: mysql-secrets
-        image: mysql:5.6
-        imagePullPolicy: Always
-        name: mysql
-        ports:
-        - containerPort: 3306
-          name: mysql
-          protocol: TCP
-        volumeMounts:
-        - mountPath: /var/lib/mysql
-          name: mysql-storage
-      volumes:
-      - name: mysql-storage
-        persistentVolumeClaim:
-          claimName: mysql-storage
----
-apiVersion: v1
-kind: Service
-metadata:
-  namespace: devops
-  labels:
-    cattle.io/creator: norman
-  name: mysql
-spec:
-  ports:
-  - name: mysql
-    port: 3306
-    protocol: TCP
-    targetPort: 3306
-  selector:
-    workload.user.cattle.io/workloadselector: deployment-devops-mysql
-  type: ClusterIP
-status:
-  loadBalancer: {}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -82,10 +24,7 @@ spec:
         - name: WORDPRESS_DB_HOST
           value: mysql
         - name: WORDPRESS_DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              key: mysql-password
-              name: mysql-secrets
+          value: 4linux
         image: ${CICD_IMAGE}:${CICD_EXECUTION_SEQUENCE}
         imagePullPolicy: Always
         name: wordpress
@@ -100,42 +39,3 @@ spec:
       - name: wordpress-storage
         persistentVolumeClaim:
           claimName: wordpress-storage
----
-apiVersion: v1
-kind: Service
-metadata:
-  namespace: devops
-  labels:
-    cattle.io/creator: norman
-  name: wordpress-nodeport
-spec:
-  externalTrafficPolicy: Cluster
-  ports:
-  - name: http
-    port: 80
-    protocol: TCP
-    targetPort: 80
-  selector:
-    workload.user.cattle.io/workloadselector: deployment-devops-wordpress
-  type: NodePort
-status:
-  loadBalancer: {}
----
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  namespace: devops
-  labels:
-    cattle.io/creator: norman
-  name: wordpress
-spec:
-  rules:
-  - host: wordpress.devops.35.247.229.217.nip.io
-    http:
-      paths:
-      - backend:
-          serviceName: wordpress-nodeport
-          servicePort: 80
-        path: /
-status:
-  loadBalancer: {}
