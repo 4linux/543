@@ -8,7 +8,7 @@ metadata:
     workload.user.cattle.io/workloadselector: deployment-devops-wordpress
   name: wordpress
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       workload.user.cattle.io/workloadselector: deployment-devops-wordpress
@@ -24,7 +24,10 @@ spec:
         - name: WORDPRESS_DB_HOST
           value: mysql
         - name: WORDPRESS_DB_PASSWORD
-          value: 4linux
+          valueFrom:
+            secretKeyRef:
+              key: mysql-password
+              name: mysql-secrets
         image: ${CICD_IMAGE}:${CICD_EXECUTION_SEQUENCE}
         imagePullPolicy: Always
         name: wordpress
@@ -34,8 +37,8 @@ spec:
           protocol: TCP
         volumeMounts:
         - mountPath: /var/www/html
-          name: wordpress-storage
+          name: wordpress-volume
       volumes:
-      - name: wordpress-storage
+      - name: wordpress-volume
         persistentVolumeClaim:
-          claimName: wordpress-storage
+          claimName: wordpress-volume
