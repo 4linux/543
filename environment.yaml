@@ -1,8 +1,0 @@
----
-- name: kube-client
-  box: trombik/ansible-centos-7.3-x86_64
-  hostname: kube-client
-  ipaddress: 200.100.50.200
-  memory: 1024
-  cpus: 1
-  provision: provision/ansible/kube-client.yaml

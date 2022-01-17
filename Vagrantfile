@@ -1,39 +1,31 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# Variaveis
-VAGRANTFILE_API_VERSION = 2
+VAGRANT_DISABLE_VBOXSYMLINKCREATE=1
 
-# Chamando modulo YAML
-require 'yaml'
+vms = {
+  'kube-client' => {'memory' => '1024', 'cpus' => 1, 'ip' => '200', 'box' => 'devopsbox/centos-8.5', 'provision' => 'provision/ansible/kube-client.yaml'},
+}
 
-# Lendo o arquivo YAML com as configuracoes do ambiente
-env = YAML.load_file('environment.yaml')
+Vagrant.configure('2') do |config|
 
-# Limitando apenas a ultima versao estavel do Vagrant instalada
-Vagrant.require_version '>= 2.0.0'
+  config.vm.box_check_update = false
 
-Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  # Iteracao com os servidores do ambiente
-  env.each do |env|
-    config.vm.define env['name'] do |srv|
-      srv.vm.box      = env['box']
-      srv.vm.hostname = env['hostname']
-      srv.vm.network 'private_network', ip: env['ipaddress']
-      if env['additional_interface'] == true
-        srv.vm.network 'private_network', ip: '1.0.0.100',
-          auto_config: false
+        if !(File.exists?('id_rsa'))
+          system("ssh-keygen -b 2048 -t rsa -f id_rsa -q -N ''")
+       end
+
+  vms.each do |name, conf|
+    config.vm.define "#{name}" do |k|
+      k.vm.box = "#{conf['box']}"
+      k.vm.hostname = "#{name}"
+      k.vm.network 'private_network', ip: "200.100.50.#{conf['ip']}"
+      k.vm.provider 'virtualbox' do |vb|
+        vb.memory = conf['memory']
+        vb.cpus = conf['cpus']
       end
-      srv.vm.provider 'virtualbox' do |vb|
-        vb.name   = env['name']
-        vb.memory = env['memory']
-        vb.cpus   = env['cpus']
-      end
-      srv.vm.provision 'ansible_local' do |ansible|
-        ansible.playbook           = env['provision']
-        ansible.install_mode       = 'pip'
-        ansible.become             = true
-        ansible.become_user        = 'root'
+      k.vm.provision 'ansible_local' do |ansible|
+        ansible.playbook = "#{conf['provision']}"
         ansible.compatibility_mode = '2.0'
       end
     end
