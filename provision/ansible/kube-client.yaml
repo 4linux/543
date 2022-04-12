@@ -27,3 +27,18 @@
       synchronize:
         src: files/wordpress-deploy
         dest: /opt
+     
+    - name: Criando diretório helm
+      synchronize:
+        src: files/helm
+        dest: /opt
+    
+    - name: Criando diretório single-cluster
+      synchronize:
+        src: files/single-cluster
+        dest: /opt
+    
+    - name: Criando diretório multi-cluster
+      synchronize:
+        src: files/multi-cluster
+        dest: /opt
