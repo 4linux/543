@@ -1,0 +1,56 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: app
+  name: app
+spec:
+  selector:
+    matchLabels:
+      app: app
+      tier: frontend
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: app
+        tier: frontend
+    spec:
+      containers:
+      - image: 4linuxrancher/app:latest
+        imagePullPolicy: Always
+        name: app
+        env:
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: app-configmaps
+              key: DB_HOST
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: app-configmaps
+              key: DB_PORT
+        - name: DB_USER
+          valueFrom:
+            configMapKeyRef:
+              name: app-configmaps
+              key: DB_USER
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: app-configmaps
+              key: DB_NAME
+        - name: DB_PASS
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: DB_PASS
+        volumeMounts:
+        - name: claim-app
+          mountPath: /app
+      volumes:
+        - name: claim-app
+          persistentVolumeClaim:
+            claimName: claim-app

@@ -1,0 +1,53 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-configmaps
+data:
+  DB_HOST: mysql
+  DB_NAME: php
+  DB_PORT: "3306"
+  DB_USER: php
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-configmaps
+data:
+  MYSQL_DATABASE: php
+  MYSQL_USER: php
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dump-usuarios
+data:
+  dump.sql: |
+    USE php;
+
+    DROP TABLE IF EXISTS usuarios;
+
+    CREATE TABLE usuarios (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            nome VARCHAR(50),
+            email VARCHAR(100),
+            senha CHAR(60),
+            cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    );
+
+    INSERT INTO usuarios (nome, email, senha) VALUES ('Suporte DevOps', 'suporte@4labs.example', '$2y$10$qTdhcJ8CkKztrvRhBN7EG.UB/YqfwjXpV2iKrZjvTIp2HTzqcflvi');
+    INSERT INTO usuarios (nome, email, senha) VALUES ('Developer PHP', 'developer@4labs.example', '$2y$10$mKvUbxiLFx9V4WPcNT3dWehd9xJ5xyZi2wkmadK8UlJBnYrLpwAqi');
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-db-config
+data:
+  create-php-db.sh: |
+        echo "CREATE DATABASE IF NOT EXISTS php CHARACTER SET utf8 COLLATE utf8_bin;" | mysql --host=localhost --user=root --password=$MYSQL_ROOT_PASSWORD
+
+        echo "GRANT ALL PRIVILEGES ON php.* TO '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';" | mysql --host=localhost --user=root --password=$MYSQL_ROOT_PASSWORD
+
+        echo "GRANT ALL PRIVILEGES ON php.* TO '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';" | mysql --host=localhost --user=root --password=$MYSQL_ROOT_PASSWORD
+
+        mysql --host=localhost --user=$MYSQL_USER --password=$MYSQL_PASSWORD < /dump/dump.sql

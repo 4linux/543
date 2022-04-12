@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app
+  labels:
+    app: app
+spec:
+  ports:
+    - port: 80
+      targetPort: 8080
+  selector:
+    app: app
+    tier: frontend
+  type: LoadBalancer

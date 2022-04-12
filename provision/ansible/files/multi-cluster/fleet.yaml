@@ -1,0 +1,22 @@
+---
+namespace: gitops
+targetCustomizations:
+
+- name: cluster1-gke
+  clusterSelector:
+    matchLabels:
+      env: test
+  yaml:
+    overlays:
+    - version1
+    - nfs
+    - scale
+    
+- name: cluster2-gke
+  clusterSelector:
+    matchLabels:
+      env: homolog
+  yaml:
+    overlays:
+    - version2
+    - nfs
