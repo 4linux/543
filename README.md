@@ -25,7 +25,7 @@ Nesse laboratório, que está centralizado no arquivo [Vagrantfile][7], sera cri
 
 Nome       | vCPUs | Memoria RAM | IP            | S.O.¹           
 ---------- |:-----:|:-----------:|:-------------:|:---------------:
-kube-client       | 1     | 1024MB | 200.100.50.200 | centos-7.3-x86_64 
+kube-client       | 1     | 1024MB | 172.16.0.200 | centos-8.5-x86_64 
 
 > **¹**: Esses Sistemas operacionais estão sendo utilizado no formato de Boxes, é a forma como o vagrant chama as imagens do sistema operacional utilizado.
 
