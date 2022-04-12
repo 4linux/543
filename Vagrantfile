@@ -4,7 +4,7 @@
 VAGRANT_DISABLE_VBOXSYMLINKCREATE=1
 
 vms = {
-  'kube-client' => {'memory' => '1024', 'cpus' => 1, 'ip' => '200', 'box' => 'devopsbox/centos-8.5', 'provision' => 'provision/ansible/kube-client.yaml'},
+  'kube-client' => {'memory' => '1024', 'cpus' => 1, 'ip' => '200', 'box' => 'devopsbox/centos-8.5-ansible-2.9', 'provision' => 'provision/ansible/kube-client.yaml'},
 }
 
 Vagrant.configure('2') do |config|
