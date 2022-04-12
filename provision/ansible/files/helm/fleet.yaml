@@ -1,0 +1,6 @@
+defaultNamespace: default
+targetCustomizations:
+- name: nfs-subdir-external-provisioner
+  clusterSelector:
+    matchLabels:
+      env: homolog

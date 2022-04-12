@@ -1,0 +1,42 @@
+affinity: {}
+image:
+  pullPolicy: IfNotPresent
+  repository: k8s.gcr.io/sig-storage/nfs-subdir-external-provisioner
+  tag: v4.0.2
+imagePullSecrets: null
+labels: {}
+leaderElection:
+  enabled: true
+nfs:
+  mountOptions: null
+  path: /nfs2
+  reclaimPolicy: Retain
+  server: 35.209.162.27
+  volumeName: nfs-subdir-external-provisioner-root
+nodeSelector: {}
+podAnnotations: {}
+podSecurityContext: {}
+podSecurityPolicy:
+  enabled: false
+rbac:
+  create: true
+replicaCount: 1
+resources: {}
+securityContext: {}
+serviceAccount:
+  annotations: {}
+  create: true
+  name: null
+storageClass:
+  accessModes: ReadWriteOnce
+  allowVolumeExpansion: true
+  annotations: {}
+  archiveOnDelete: true
+  create: true
+  defaultClass: false
+  name: nfs-client
+  onDelete: null
+  pathPattern: null
+  reclaimPolicy: Delete
+strategyType: Recreate
+tolerations: null
