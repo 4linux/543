@@ -1,0 +1,17 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: 2-egress-webserver-to-pod-client
+  namespace: devops
+spec:
+  podSelector:
+    matchLabels:
+      curso: rancher
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          app: php

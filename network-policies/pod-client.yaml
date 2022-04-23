@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-client
+  namespace: devops
+  labels:
+    curso: rancher
+spec:
+  containers:
+  - name: busyboxplus
+    image: radial/busyboxplus
+    imagePullPolicy: IfNotPresent
+    command:
+      - sleep
+      - "3600"
