@@ -1,0 +1,22 @@
+---
+antiAffinity: "soft"
+
+esJavaOpts: "-Xmx128m -Xms128m"
+
+resources:
+  requests:
+    cpu: "300m"
+    memory: "1024M"
+  limits:
+    cpu: "1500m"
+    memory: "1024M"
+
+volumeClaimTemplate:
+  accessModes: [ "ReadWriteOnce" ]
+  storageClassName: "local-path"
+  resources:
+    requests:
+      storage: "100M"
+
+service:
+  type: "LoadBalancer"
