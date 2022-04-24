@@ -3,7 +3,7 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: 4-allow-dns
-  namespace: 4labs
+  namespace: devops
 spec:
   podSelector: {}
   policyTypes:
