@@ -1,0 +1,12 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: webserver
+  namespace: devops
+spec:
+  defaultBackend:
+    service:
+      name: webserver
+      port:
+        number: 80
