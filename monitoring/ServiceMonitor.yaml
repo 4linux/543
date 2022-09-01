@@ -1,0 +1,17 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: apache-monitor
+  namespace: default
+spec:
+  endpoints:
+  - interval: 15s
+    path: /metrics
+    targetPort: apache-exporter
+  namespaceSelector:
+    matchNames:
+    - default
+  selector:
+    matchLabels:
+      app: apache-exporter
