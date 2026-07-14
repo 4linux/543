@@ -2,17 +2,15 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: 5-allow-internet-webserver-to-egress
+  name: 5-allow-public-http-to-webserver
   namespace: developer
 spec:
   podSelector:
     matchLabels:
       app: php
   policyTypes:
-  - Egress
-  egress:
-  - to:
-    - podSelector: {}
-  - to:
-    - ipBlock:
-        cidr: '0.0.0.0/0'
+    - Ingress
+  ingress:
+    - ports:
+        - protocol: TCP
+          port: 80
