@@ -2,16 +2,15 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: 4-allow-dns
+  name: 4-allow-dns-egress
   namespace: developer
 spec:
   podSelector: {}
   policyTypes:
-  - Egress
-  - Ingress
+    - Egress
   egress:
-  - ports:
-    - port: 53
-      protocol: TCP
-    - port: 53
-      protocol: UDP
+    - ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
