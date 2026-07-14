@@ -4,8 +4,6 @@ kind: Pod
 metadata:
   name: pod-client
   namespace: developer
-  labels:
-    curso: rancher
 spec:
   containers:
   - name: alpine
