@@ -8,8 +8,8 @@ metadata:
     curso: rancher
 spec:
   containers:
-  - name: busyboxplus
-    image: radial/busyboxplus
+  - name: alpine
+    image: alpine
     imagePullPolicy: IfNotPresent
     command:
       - sleep
