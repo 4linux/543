@@ -9,8 +9,15 @@ spec:
     matchLabels:
       app: php
   policyTypes:
-    - Ingress
+  - Ingress
+  - Egress
   ingress:
-    - ports:
-        - protocol: TCP
-          port: 80
+  - ports:
+    - protocol: TCP
+      port: 80
+  egress:
+  - to:
+    - podSelector: {}
+  - to:
+    - ipBlock:
+        cidr: 0.0.0.0/0
