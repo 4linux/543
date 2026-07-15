@@ -1,4 +1,0 @@
-spec:
-  storageClassName: nfs-client
-  accessModes:
-  - ReadWriteMany

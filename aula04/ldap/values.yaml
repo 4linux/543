@@ -1,0 +1,96 @@
+global:
+  ldapDomain: "4labs.example"
+  adminUser: "admin"
+  adminPassword: "admin"
+  configUser: "admin"
+  configPassword: "admin"
+  ldapPort: 389
+  sslLdapPort: 636
+
+replicaCount: 1
+readOnlyReplicaCount: 0
+
+replication:
+  enabled: false
+
+persistence:
+  enabled: false
+
+service:
+  type: NodePort
+  enableLdapPort: true
+  enableSslLdapPort: false
+  ldapPortNodePort: 30389
+
+serviceReadOnly:
+  type: ClusterIP
+  enableLdapPort: true
+  enableSslLdapPort: false
+
+phpldapadmin:
+  enabled: false
+
+ltb-passwd:
+  enabled: false
+
+env:
+  LDAP_SKIP_DEFAULT_TREE: "yes"
+  LDAP_ALLOW_ANON_BINDING: "no"
+  LDAP_ENABLE_TLS: "no"
+  LDAP_REQUIRE_TLS: "false"
+  LDAPTLS_REQCERT: "never"
+
+initialSchema: "cosine,inetorgperson,nis"
+
+customLdifFiles:
+  00-lab-openldap.ldif: |
+    dn: dc=4labs,dc=example
+    objectClass: top
+    objectClass: dcObject
+    objectClass: organization
+    o: 4Linux Lab
+    dc: 4labs
+
+    dn: ou=users,dc=4labs,dc=example
+    objectClass: organizationalUnit
+    ou: users
+
+    dn: ou=groups,dc=4labs,dc=example
+    objectClass: organizationalUnit
+    ou: groups
+
+    dn: uid=analista,ou=users,dc=4labs,dc=example
+    objectClass: inetOrgPerson
+    objectClass: posixAccount
+    objectClass: shadowAccount
+    cn: Analista DevOps
+    sn: DevOps
+    uid: analista
+    uidNumber: 10001
+    gidNumber: 10001
+    homeDirectory: /home/analista
+    loginShell: /bin/bash
+    userPassword: analista@123
+
+    dn: uid=developer,ou=users,dc=4labs,dc=example
+    objectClass: inetOrgPerson
+    objectClass: posixAccount
+    objectClass: shadowAccount
+    cn: Developer Build
+    sn: Build
+    uid: developer
+    uidNumber: 10002
+    gidNumber: 10002
+    homeDirectory: /home/developer
+    loginShell: /bin/bash
+    userPassword: developer@123
+
+    dn: cn=rancher-admins,ou=groups,dc=4labs,dc=example
+    objectClass: groupOfNames
+    cn: rancher-admins
+    member: uid=analista,ou=users,dc=4labs,dc=example
+
+    dn: cn=rancher-devs,ou=groups,dc=4labs,dc=example
+    objectClass: groupOfNames
+    cn: rancher-devs
+    member: uid=developer,ou=users,dc=4labs,dc=example

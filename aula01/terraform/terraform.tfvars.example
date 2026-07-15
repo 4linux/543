@@ -1,0 +1,30 @@
+# Projeto inicial/padrão usado para executar o Terraform.
+# Neste laboratório, firewall, IPs externos e instâncias serão criados neste projeto.
+bootstrap_project_id = "ID_DO_PROJETO_INICIAL"
+
+# Conta de faturamento usada para vincular os projetos cluster1 e cluster2.
+# Exemplo: "000000-000000-000000"
+billing_account_id = "ID_DA_CONTA_DE_FATURAMENTO"
+
+# Caso utilize uma Organization, informe o ID.
+# Caso sua conta não possua Organization, deixe vazio.
+org_id = ""
+
+# Caso utilize uma Folder, informe o ID.
+# Caso não utilize Folder, deixe vazio.
+folder_id = ""
+
+# Prefixo usado para gerar IDs globais únicos dos projetos.
+# Os nomes amigáveis serão cluster1 e cluster2.
+project_prefix = "rancher543"
+
+# Região e zona padrão dos recursos.
+region = "us-central1"
+zone   = "us-central1-a"
+
+# Para laboratório, pode ser usado 0.0.0.0/0.
+# Em produção, substitua pelo seu IP público ou rede autorizada.
+allowed_source_ranges = ["0.0.0.0/0"]
+
+# Imagem Ubuntu padrão usada nas instâncias.
+ubuntu_image_family = "ubuntu-2204-lts"
